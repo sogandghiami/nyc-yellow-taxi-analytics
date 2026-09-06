@@ -62,13 +62,32 @@ Power BI Dashboard *(in progress)*
 ```
 
 ## Key Findings
-
-- **Fare peaks between 5–7 AM**, likely driven by airport trips (long, fixed-rate rides) rather than traffic.
-- **Trip volume is highest Thu–Sat**, but average fare stays flat across the week — the weekend surge is about *more riders*, not pricier trips.
-- **Distance and fare are strongly linearly related** as expected, confirmed across both pandas and SQL analysis.
-- **Data quality issue found and fixed:** ~4% of trips had `RatecodeID = 99` (officially "Null/unknown" per TLC docs). A naive groupby-mode fill failed silently when 99 was itself the majority value in a location group; fixed by excluding 99 before computing the mode.
-- **Driver profitability ≠ trip volume:** Queens (largely due to JFK) has the highest earnings-per-minute, while Manhattan — despite having by far the most trips — ranks lower, since its trips are shorter and more traffic-heavy.
-- **ML model:** Random Forest predicts `fare_amount` with **R² = 0.83, RMSE ≈ 7.0**, with `trip_distance` as by far the strongest predictor.
+ 
+### Fare by Hour
+![Average fare and trip count by hour](assets/fare_by_hour.png)
+ 
+Average fares peak between 5–7 AM and drop to their lowest between 10 AM and 2 PM. However, the peak-earning hours actually have the *lowest* trip volume, while the 10 AM–2 PM window has the *highest* trip volume. This suggests trips during peak-earning hours are more likely to be long-distance or airport rides — which carry higher fares — while midday trips are more likely to be short, lower-fare rides.
+ 
+### Trip Volume by Day of Week
+![Trip count and average fare by day of week](assets/trips_by_day.png)
+ 
+Trip volume changes a lot depending on the day of the week — Thursday, Friday, and Saturday have the highest number of trips (around 650,000), almost double the number on Monday and Sunday (around 350,000–375,000). But the average fare stays fairly similar across all days, ranging only between $18 and $22. This means the weekend increase in trips comes from more people riding, not from pricier trips.
+ 
+### Distance–Fare Relationship by Rate Code
+![Average fare and distance by rate code](assets/ratecode_distance_fare.png)
+ 
+After cleaning invalid `RatecodeID` values (`99` = Null/unknown, reassigned based on the most common valid rate per drop-off location), the data shows a clear positive relationship between average distance and average fare across rate codes. Rate code 4 (Nassau/Westchester) has both the longest average distance and the highest average fare, while standard-rate trips (code 1) make up 97% of all rides but have the lowest average fare due to their short in-city distances.
+ 
+### Driver Earnings by Borough and Hour
+![Average earnings per minute by borough and hour](assets/earnings_heatmap.png)
+ 
+Queens (largely driven by JFK Airport) consistently offers the highest earnings-per-minute for drivers — up to $1.91 in early morning hours. Interestingly, Manhattan, despite having the highest trip volume, shows comparatively lower earnings per minute: shorter, traffic-heavy trips in the busiest borough yield less per minute than longer, higher-fare trips elsewhere. EWR (Newark) was excluded and some Staten Island hours limited due to insufficient trip volume (fewer than 20 trips), to avoid unreliable averages.
+ 
+### Fare Prediction Model
+![Feature importance for the Random Forest model](assets/feature_importance.png)
+![Actual vs predicted fare](assets/actual_vs_predicted.png)
+ 
+The Random Forest model predicts `fare_amount` with **R² = 0.83, RMSE ≈ 7.0**, outperforming a Linear Regression baseline (R² = 0.78). `trip_distance` is by far the strongest predictor — consistent with the EDA findings. `RatecodeID`, despite showing strong average fare differences in exploratory analysis, contributes relatively little additional predictive power once distance is included, since the two are correlated. The model is most accurate for typical mid-range fares, with higher prediction error for very low-fare and very high-fare trips.
 
 ## Repository Structure
 
@@ -79,8 +98,6 @@ Power BI Dashboard *(in progress)*
 │   └── uber_trips.db                     # SQLite database (star schema)
 ├── README.md
 ```
-
-## How to Run
 
 ## How to Run
 
