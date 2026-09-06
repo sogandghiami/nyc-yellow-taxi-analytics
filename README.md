@@ -94,8 +94,13 @@ The Random Forest model predicts `fare_amount` with **R² = 0.83, RMSE ≈ 7.0**
 ```
 ├── notebooks/
 │   └── nyc_yellow_taxi_analysis.ipynb   # full pipeline: cleaning → EDA → SQL → ML
-├── output/
-│   └── uber_trips.db                     # SQLite database (star schema)
+├── assets/
+│   └── actual_vs_predicted.png
+│   └── earnings_heatmap.png
+│   └── fare_by_hour.png
+│   └── feature_importance.png
+│   └── ratecode_distance_fare.png
+│   └── trips_by_day.png                 
 ├── README.md
 ```
 
