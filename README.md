@@ -82,12 +82,12 @@ Power BI Dashboard *(in progress)*
 
 ## How to Run
 
+## How to Run
+
 1. Clone the repository.
-2. Set your own data path and (if using the GitHub sync feature) your own token as environment variables — no personal paths or credentials are hardcoded in the notebook.
-3. Run `download_taxi_data(year, month)` to fetch the dataset for any month you want to analyze.
-4. Run the notebook top to bottom.
-> Note: `output/uber_trips.db` and the trained model (`.joblib`) are not included in this repo (large binary files). 
-> Run the notebook end-to-end to regenerate them locally.
+2. Run `download_taxi_data(year, month)` to fetch the dataset for any month you want to analyze — no manual setup, paths, or credentials required.
+3. Run the notebook top to bottom.
+> Note: `output/uber_taxi.db` and the trained model (`.joblib`) are not included in this repo (large binary files). Run the notebook end-to-end to regenerate them locally.
 
 ## Limitations
 
